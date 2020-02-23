@@ -37,9 +37,10 @@ public class RNDismissableDatePickerDialog extends DatePickerDialog {
       @Nullable DatePickerDialog.OnDateSetListener callback,
       int year,
       int monthOfYear,
-      int dayOfMonth) {
+      int dayOfMonth,
+      RNDatePickerDisplay display) {
     super(context, callback, year, monthOfYear, dayOfMonth);
-    fixSpinner(context, year, monthOfYear, dayOfMonth);
+    fixSpinner(context, year, monthOfYear, dayOfMonth, display);
   }
 
   public RNDismissableDatePickerDialog(
@@ -48,9 +49,10 @@ public class RNDismissableDatePickerDialog extends DatePickerDialog {
       @Nullable DatePickerDialog.OnDateSetListener callback,
       int year,
       int monthOfYear,
-      int dayOfMonth) {
+      int dayOfMonth,
+      RNDatePickerDisplay display) {
     super(context, theme, callback, year, monthOfYear, dayOfMonth);
-    fixSpinner(context, year, monthOfYear, dayOfMonth);
+    fixSpinner(context, year, monthOfYear, dayOfMonth, display);
   }
 
   @Override
@@ -62,11 +64,10 @@ public class RNDismissableDatePickerDialog extends DatePickerDialog {
     }
   }
 
-  private void fixSpinner(Context context, int year, int month, int dayOfMonth) {
+  private void fixSpinner(Context context, int year, int month, int dayOfMonth, RNDatePickerDisplay display) {
     if (Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
       try {
         // Get the theme's android:datePickerMode
-        final int MODE_SPINNER = 2;
         Class<?> styleableClass = Class.forName("com.android.internal.R$styleable");
         Field datePickerStyleableField = styleableClass.getField("DatePicker");
         int[] datePickerStyleable = (int[]) datePickerStyleableField.get(null);
@@ -74,12 +75,9 @@ public class RNDismissableDatePickerDialog extends DatePickerDialog {
         final TypedArray a =
             context.obtainStyledAttributes(
                 null, datePickerStyleable, android.R.attr.datePickerStyle, 0);
-        Field datePickerModeStyleableField = styleableClass.getField("DatePicker_datePickerMode");
-        int datePickerModeStyleable = datePickerModeStyleableField.getInt(null);
-        final int mode = a.getInt(datePickerModeStyleable, MODE_SPINNER);
         a.recycle();
 
-        if (mode == MODE_SPINNER) {
+        if (display == RNDatePickerDisplay.SPINNER) {
           DatePicker datePicker =
               (DatePicker)
                   findField(DatePickerDialog.class, DatePicker.class, "mDatePicker").get(this);
