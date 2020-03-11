@@ -36,7 +36,7 @@ export default class TimePickerAndroid {
     toMilliseconds(options, 'value');
     options.display = options.display || DISPLAY_DEFAULT;
 
-    return NativeModules.RNTimePickerAndroid.open(options);
+    return NativeModules.TimePickerAndroid.open(options);
   }
 
   /**
