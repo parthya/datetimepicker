@@ -39,7 +39,7 @@ export default class DatePickerAndroid {
     toMilliseconds(options, 'value', 'minimumDate', 'maximumDate');
     options.display = options.display || DISPLAY_DEFAULT;
 
-    return NativeModules.RNDatePickerAndroid.open(options);
+    return NativeModules.DatePickerAndroid.open(options);
   }
 
   /**
